@@ -1,0 +1,158 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+        <title>Unity Web Player | %UNITY_WEB_NAME%</title>
+        %UNITY_UNITYOBJECT_DEPENDENCIES%
+        <script type="text/javascript">
+        <!--
+        var unityObjectUrl = "%UNITY_UNITYOBJECT_URL%";
+        if (document.location.protocol == 'https:')
+            unityObjectUrl = unityObjectUrl.replace("http://", "https://ssl-");
+        document.write('<script type="text\/javascript" src="' + unityObjectUrl + '"><\/script>');
+        -->
+        </script>
+        <script type="text/javascript">
+        <!--
+            jQuery(function() {
+                var config = {
+                    width: %UNITY_WIDTH%, 
+                    height: %UNITY_HEIGHT%,
+                    params: %UNITY_PLAYER_PARAMS%
+                };
+                var u = new UnityObject2(config);
+
+                var $missingScreen = jQuery("#unityPlayer").find(".missing");
+                var $brokenScreen = jQuery("#unityPlayer").find(".broken");
+                $missingScreen.hide();
+                $brokenScreen.hide();
+                
+                u.observeProgress(function (progress) {
+                    switch(progress.pluginStatus) {
+                        case "broken":
+                            $brokenScreen.find("a").click(function (e) {
+                                e.stopPropagation();
+                                e.preventDefault();
+                                u.installPlugin();
+                                return false;
+                            });
+                            $brokenScreen.show();
+                        break;
+                        case "missing":
+                            $missingScreen.find("a").click(function (e) {
+                                e.stopPropagation();
+                                e.preventDefault();
+                                u.installPlugin();
+                                return false;
+                            });
+                            $missingScreen.show();
+                        break;
+                        case "installed":
+                            $missingScreen.remove();
+                        break;
+                        case "first":
+                        break;
+                    }
+                });
+                u.initPlugin(jQuery("#unityPlayer")[0], "%UNITY_WEB_PATH%");
+            });
+        -->
+        </script>
+		
+		<script type="text/javascript">
+			$(window).on("load", function(){
+				var version = parseInt(window.navigator.appVersion.match(/Chrome\/(\d+)\./)[1], 10);
+				if(version > 41)
+				{
+					$(".chrome-update").css("display", "block");
+				}
+			});
+		</script>
+        <style type="text/css">
+        <!--
+        body {
+            font-family: Helvetica, Verdana, Arial, sans-serif;
+            background-color: white;
+            color: black;
+            text-align: center;
+        }
+        a:link, a:visited {
+            color: #000;
+        }
+        a:active, a:hover {
+            color: #666;
+        }
+        p.header {
+            font-size: small;
+        }
+        p.header span {
+            font-weight: bold;
+        }
+        p.footer {
+            font-size: x-small;
+        }
+        div.content {
+            margin: auto;
+            width: %UNITY_WIDTH%px;
+        }
+        div.broken,
+        div.missing {
+            margin: auto;
+            position: relative;
+            top: 50%;
+            width: 193px;
+        }
+        div.broken a,
+        div.missing a {
+            height: 63px;
+            position: relative;
+            top: -31px;
+        }
+        div.broken img,
+        div.missing img {
+            border-width: 0px;
+        }
+        div.broken {
+            display: none;
+        }
+        div#unityPlayer {
+            cursor: default;
+            height: %UNITY_HEIGHT%px;
+            width: %UNITY_WIDTH%px;
+        }
+        -->
+        </style>
+		<style>
+		.chrome-update{
+			display: none;
+			text-align: center;
+		}
+		</style>
+    </head>
+    <body>
+        <p class="header"><span>Unity Web Player | </span>%UNITY_WEB_NAME%</p>%UNITY_BETA_WARNING%
+        <div class="content">
+            <div id="unityPlayer">
+                <div class="missing">
+                    <a href="http://unity3d.com/webplayer/" title="Unity Web Player. Install now!">
+                        <img alt="Unity Web Player. Install now!" src="http://webplayer.unity3d.com/installation/getunity.png" width="193" height="63" />
+                    </a>
+                </div>
+                <div class="broken">
+                    <a href="http://unity3d.com/webplayer/" title="Unity Web Player. Install now! Restart your browser after install.">
+                        <img alt="Unity Web Player. Install now! Restart your browser after install." src="http://webplayer.unity3d.com/installation/getunityrestart.png" width="193" height="63" />
+                    </a>
+                </div>
+				<div class="chrome-update">
+					<p>It appears you're on Chrome Version 42 or greater. In these versions of Chrome, Unity Web Player no longer works!</p>
+					<p>If you would like to play this game in your browser, please use a browser that supports Unity Web Player, such as Firefox or Safari.</p>
+					<p>Otherwise, you may play the downloadable version of the game.</p>
+					<a href="%UNITY_CUSTOM_DOWNLOADLINK%">Download the game here!</a>
+				</div>
+            </div>
+        </div>
+		<p>%UNITY_CUSTOM_DESCRIPTION%</p>
+		<a href="%UNITY_CUSTOM_DOWNLOADLINK%">Download</a>
+        <p class="footer">&laquo;<a href="http://twitter.com/fussycashew">@fussycashew</a> | <a href="http://twitter.com/smallestpamcake">@smallestpamcake</a> | <a href="http://twitter.com/bansheetweet">@bansheetweet</a> &raquo;</p>
+    </body>
+</html>
